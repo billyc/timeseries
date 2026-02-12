@@ -56,7 +56,7 @@ const trendData = computed(() => {
     if (i === 0) {
       trend.push(values[0]!)
     } else {
-      trend.push(trend[i - 1]! + 0.1 * (values[i]! - trend[i - 1]!))
+      trend.push(trend[i - 1]! + 0.12 * (values[i]! - trend[i - 1]!))
     }
   }
   return trend
