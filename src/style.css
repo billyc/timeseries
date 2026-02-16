@@ -1,3 +1,9 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -20,10 +26,10 @@ body {
 }
 
 h1 {
-  font-size: 2em;
+  font-size: 1.4em;
   line-height: 1.1;
-  margin-top: 0.5rem;
-  margin-bottom: 1rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.75rem;
   color: #36c;
 }
 
@@ -47,27 +53,11 @@ button:focus-visible {
 }
 
 #app {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0.5rem;
-  text-align: center;
-}
-
-table {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-}
-
-th,
-td {
-  border-bottom: 1px solid #333;
-  padding: 0.25em 0.75em;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0.5rem 0.75rem;
   text-align: center;
-}
-
-th {
-  background-color: #1a1a1a;
 }
 
 @media (prefers-color-scheme: light) {
@@ -77,12 +67,5 @@ th {
   }
   button {
     background-color: #f9f9f9;
-  }
-  th {
-    background-color: #f0f0f0;
-  }
-  th,
-  td {
-    border-bottom-color: #ddd;
   }
 }

@@ -110,11 +110,23 @@ const diffLinesPlugin: Plugin<'line'> = {
 
 const chartOptions: ChartOptions<'line'> = {
   responsive: true,
-  plugins: { title: { display: false } },
+  maintainAspectRatio: true,
+  layout: { padding: { right: 0, left: 0 } },
+  plugins: { title: { display: false }, legend: { display: false } },
   scales: {
-    x: { ticks: { color: '#aaa' }, grid: { display: false }, border: { color: '#555' } },
+    x: {
+      ticks: {
+        color: '#aaa',
+        maxRotation: 45,
+        autoSkip: true,
+        maxTicksLimit: 8,
+        font: { size: 11 },
+      },
+      grid: { display: false },
+      border: { color: '#555' },
+    },
     y: {
-      ticks: { color: '#aaa' },
+      ticks: { color: '#aaa', font: { size: 11 } },
       grid: { display: false },
       border: { color: '#555' },
       grace: '15%',
@@ -156,35 +168,30 @@ onMounted(load)
 </script>
 
 <template>
-  <h1>Time Series Data Tracker</h1>
+  <h1>kg</h1>
 
   <form class="entry-form" @submit.prevent="save">
     <input type="date" v-model="date" required />
-    <input type="number" v-model.number="weight" step="0.1" placeholder="Weight" required />
-    <button type="submit">Save</button>
+    <input type="number" v-model.number="weight" step="0.1" placeholder="kg" required />
+    <button type="submit">+</button>
   </form>
 
   <div v-if="entries.length" class="chart-container">
     <Line :data="chartData" :options="chartOptions" :plugins="[diffLinesPlugin]" />
   </div>
 
-  <table v-if="entries.length">
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th>Weight</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="entry in sortedForTable" :key="entry.date + entry.value">
-        <td>{{ entry.date }}</td>
-        <td>{{ entry.value }}</td>
-        <td class="delete-cell">
-          <span class="delete-btn" @click="removeEntry(entry)">&times;</span>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div v-if="entries.length" class="data-grid">
+    <div class="grid-header">Date</div>
+    <div class="grid-header">Weight</div>
+    <div class="grid-header grid-delete-col"></div>
+    <template v-for="entry in sortedForTable" :key="entry.date + entry.value">
+      <div class="grid-cell">{{ entry.date }}</div>
+      <div class="grid-cell">{{ entry.value }}</div>
+      <div class="grid-cell grid-delete-col">
+        <span class="delete-btn" @click="removeEntry(entry)">&times;</span>
+      </div>
+    </template>
+  </div>
 
   <p v-if="entries.length" class="export">
     Export data as: <a href="#" @click.prevent="exportJSON">JSON</a>&nbsp;
@@ -195,27 +202,38 @@ onMounted(load)
 <style scoped>
 .entry-form {
   display: flex;
-  gap: 0.5rem;
-  justify-content: center;
-  margin-bottom: 2rem;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
 }
 
 .entry-form input {
-  padding: 0.5em 0.75em;
+  padding: 0.5em 0.4em;
   border-radius: 8px;
   border: 1px solid #444;
   background: #1a1a1a;
   color: inherit;
-  font-size: 1em;
+  font-size: 0.9em;
+  min-width: 0;
+  flex: 1;
+}
+
+.entry-form input[type='number'] {
+  flex: 0.6;
+}
+
+.entry-form button {
+  flex: 0 0 auto;
+  padding: 0.5em 0.9em;
+  font-size: 0.9em;
 }
 
 .chart-container {
-  max-width: 700px;
-  margin: 0 auto 2rem;
+  width: 100%;
+  margin: 0 0 1rem;
 }
 
 .export {
-  margin-top: 1.5rem;
+  margin-top: 1rem;
   font-size: 0.85em;
   color: #888;
 }
@@ -224,21 +242,40 @@ onMounted(load)
   color: #646cff;
 }
 
-.delete-cell {
-  border: none;
-  width: 1.5em;
+.data-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.5em;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.grid-header {
+  font-weight: 600;
+  padding: 0.3em 0.5em;
+  font-size: 0.9em;
+  text-align: center;
+  background-color: #1a1a1a;
+  border-bottom: 1px solid #333;
+}
+
+.grid-cell {
+  padding: 0.3em 0.5em;
+  font-size: 0.9em;
+  text-align: center;
+  border-bottom: 1px solid #333;
+}
+
+.grid-delete-col {
   padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .delete-btn {
-  visibility: hidden;
   cursor: pointer;
-  color: #888;
+  color: #bbb;
   font-size: 1.1em;
-}
-
-tr:hover .delete-btn {
-  visibility: visible;
 }
 
 .delete-btn:hover {
@@ -249,6 +286,13 @@ tr:hover .delete-btn {
   .entry-form input {
     background: #f9f9f9;
     border-color: #ccc;
+  }
+  .grid-header {
+    background-color: #f0f0f0;
+  }
+  .grid-header,
+  .grid-cell {
+    border-bottom-color: #ddd;
   }
 }
 </style>

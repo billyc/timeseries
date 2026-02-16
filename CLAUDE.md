@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-weigh-me is a Vue 3 + TypeScript application built with Vite.
+kg is a Vue 3 + TypeScript application built with Vite.
 
 ## Commands
 
@@ -19,7 +19,11 @@ weigh-me is a Vue 3 + TypeScript application built with Vite.
 - **Components:** `src/components/`
 - **Global styles:** `src/style.css` (imported in main.ts); components use `<style scoped>`
 - Components use Vue 3 `<script setup>` syntax with Composition API
-- No router or state management library is configured yet
+- No router or state management library is configured
+
+## Design
+
+The site will generally be used on mobile phones, so the layout should always try to fit things reasonably on a small screen and use small but tappable widgets.
 
 ## TypeScript
 
